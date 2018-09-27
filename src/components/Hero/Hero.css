@@ -1,7 +1,9 @@
 .hero {
-  height: 500px;
+  height: 275px;
+  background-image: url("https://static.smartgurutips.com//uploads/2018/05/Exercise.jpg");
+  background-color: lightsalmon;
   background-size: cover;
-  background-position: center;
+  background-position: top;
   position: relative;
 }
 

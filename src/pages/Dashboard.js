@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import API from "../utils/API";
-import Card from "../components/Card";
-import Alert from "../components/Alert";
+import Hero from "../components/Hero";
+import Container from "../components/Container";
+import Row from "../components/Row";
+import Col from "../components/Col";
+/* import Card from "../components/Card";
+import Alert from "../components/Alert"; */
 
-class Discover extends Component {
+class Dashboard extends Component {
   state = {
     image: "",
     match: false,
@@ -12,7 +16,7 @@ class Discover extends Component {
 
   // When the component mounts, load the next dog to be displayed
   componentDidMount() {
-    this.loadNextDog();
+     this.loadNextDog(); 
   }
 
   handleBtnClick = event => {
@@ -39,7 +43,7 @@ class Discover extends Component {
     this.loadNextDog();
   };
 
-  loadNextDog = () => {
+   loadNextDog = () => {
     API.getRandomDog()
       .then(res =>
         this.setState({
@@ -47,11 +51,53 @@ class Discover extends Component {
         })
       )
       .catch(err => console.log(err));
-  };
+  }; 
 
   render() {
     return (
-      <div>
+
+       <div>
+       <Hero backgroundImage="https://static.smartgurutips.com//uploads/2018/05/Exercise.jpg">
+      <h1>Fitness App</h1>
+      <h2>Achieve your goals!</h2>
+       </Hero>   
+
+<Container style={{ marginTop: 25}}>
+      <Row>
+        <Col size="md-4" style={{backgroundColor:"beige"}} >
+          <h1>Column 1</h1>
+          <h1>Column 1</h1>
+          <h1>Column 1</h1>
+          <h1>Column 1</h1>
+          <h1>Column 1</h1>
+          <h1>Column 1</h1>
+        </Col>
+      
+        <Col size="md-4" style={{backgroundColor:"#bbb"}}>
+        <h1>Column 2</h1>
+        <h1>Column 2</h1>
+        <h1>Column 2</h1>
+        <h1>Column 2</h1>
+        <h1>Column 2</h1>
+        <h1>Column 2</h1>
+
+        </Col>
+
+        <Col size="md-4" style={{backgroundColor:"beige"}}>
+        <h1>Column 3</h1>  
+        <h1>Column 3</h1> 
+        <h1>Column 3</h1> 
+        <h1>Column 3</h1> 
+        <h1>Column 3</h1> 
+        <h1>Column 3</h1>         
+        </Col>
+      </Row>
+    </Container>
+
+</div> 
+
+
+    /*    { <div>
         <h1 className="text-center">Make New Friends</h1>
         <h3 className="text-center">
           Thumbs up on any pups you'd like to meet!
@@ -63,9 +109,9 @@ class Discover extends Component {
         <Alert style={{ opacity: this.state.match ? 1 : 0 }} type="success">
           Yay! That Pup Liked You Too!!!
         </Alert>
-      </div>
+      </div>  } */
     );
   }
 }
 
-export default Discover;
+export default Dashboard;
