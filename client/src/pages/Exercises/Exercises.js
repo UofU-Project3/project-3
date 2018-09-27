@@ -3,6 +3,8 @@ import ExerciseType from "../../components/Accordion/Accordion.js";
 import CollapseItem from "../../components/Accordion/Collapse.js";
 import API from "../../utils/API";
 import { Col, Row, Container } from "../../components/Grid";
+//import ListItem from "../../components/List";
+//import PopoverExampleMulti from "../../components/Accordion/Popover.js";
 
 
 class Exercises extends Component {
@@ -19,7 +21,8 @@ class Exercises extends Component {
       stretchesMuscles: [],
       olympicsMuscles: [],
       cardiosMuscles: [],
-      powerliftingsMuscles: []
+      powerliftingsMuscles: [],
+      popoverOpen: false
     }
   };
 //need an onClick Function to toggle collapses
@@ -134,6 +137,7 @@ class Exercises extends Component {
     }
   };
 
+
   render() {
     return (
       <Container fluid>
@@ -163,7 +167,12 @@ class Exercises extends Component {
                           {this.state.cardios.map(cardios => (
                             <CollapseItem
                               key={cardios._id}
+                              id={cardios._id}
                               name={cardios.Name}
+                              otherMuscleGroups={cardios.Other_Muscle_Groups}
+                              detailedMuscleGroup={cardios.Detailed_Muscle_Group}
+                              equipment={cardios.Equipment}
+                              difficulty={cardios.Difficulty}
                             />))}
                         </ExerciseType>
                       ))}
@@ -191,7 +200,12 @@ class Exercises extends Component {
                           {this.state.olympics.map(olympics => (
                             <CollapseItem
                               key={olympics._id}
+                              id={olympics._id}
                               name={olympics.Name}
+                              otherMuscleGroups={olympics.Other_Muscle_Groups}
+                              detailedMuscleGroup={olympics.Detailed_Muscle_Group}
+                              equipment={olympics.Equipment}
+                              difficulty={olympics.Difficulty}
                             />))}
                         </ExerciseType>
 
@@ -221,7 +235,12 @@ class Exercises extends Component {
                           {this.state.powerliftings.map(powerliftings => (
                             <CollapseItem
                               key={powerliftings._id}
+                              id={powerliftings._id}
                               name={powerliftings.Name}
+                              otherMuscleGroups={powerliftings.Other_Muscle_Groups}
+                              detailedMuscleGroup={powerliftings.Detailed_Muscle_Group}
+                              equipment={powerliftings.Equipment}
+                              difficulty={powerliftings.Difficulty}
                             />))}
                         </ExerciseType>
                       ))}
@@ -251,6 +270,11 @@ class Exercises extends Component {
                             <CollapseItem
                               key={strengths._id}
                               name={strengths.Name}
+                              id={strengths._id}
+                              otherMuscleGroups={strengths.Other_Muscle_Groups}
+                              detailedMuscleGroup={strengths.Detailed_Muscle_Group}
+                              equipment={strengths.Equipment}
+                              difficulty={strengths.Difficulty}
                             />))}
                         </ExerciseType>
                       ))}
@@ -267,7 +291,7 @@ class Exercises extends Component {
                     </button>
                   </h5>
                 </div>
-                <div id="collapseFour" className="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                <div id="collapseFive" className="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
                   <div className="card-body">
                     <ul>
                       {this.state.stretchesMuscles.map(stretch => (
@@ -279,8 +303,19 @@ class Exercises extends Component {
                           {this.state.stretches.map(stretches => (
                             <CollapseItem
                               key={stretches._id}
+                              id={stretches._id}
                               name={stretches.Name}
-                            />))}
+                              otherMuscleGroups={stretches.Other_Muscle_Groups}
+                              detailedMuscleGroup={stretches.Detailed_Muscle_Group}
+                              equipment={stretches.Equipment}
+                              difficulty={stretches.Difficulty}
+                            >
+                            
+                            </CollapseItem>
+                          
+                            
+                           
+                            ))}
                         </ExerciseType>
 
                       ))}
