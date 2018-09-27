@@ -4,8 +4,11 @@ import Container from "../components/Container";
 import SearchForm from "../components/SearchForm";
 import SearchResults from "../components/SearchResults";
 import Alert from "../components/Alert";
+import Hero from "../components/Hero";
+import Row from "../components/Row";
+import Col from "../components/Col";
 
-class Search extends Component {
+class Register extends Component {
   state = {
     search: "",
     breeds: [],
@@ -38,6 +41,11 @@ class Search extends Component {
   render() {
     return (
       <div>
+      <Hero backgroundImage="https://static.smartgurutips.com//uploads/2018/05/Exercise.jpg">
+     <h1>Fitness App</h1>
+     <h2>Achieve your goals!</h2>
+      </Hero>   
+      
         <Container style={{ minHeight: "80%" }}>
           <h1 className="text-center">Search By Breed!</h1>
           <Alert
@@ -58,4 +66,4 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default Register;
