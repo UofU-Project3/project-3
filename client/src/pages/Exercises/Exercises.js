@@ -3,9 +3,10 @@ import ExerciseType from "../../components/Accordion/Accordion.js";
 import CollapseItem from "../../components/Accordion/Collapse.js";
 import API from "../../utils/API";
 import { Col, Row, Container } from "../../components/Grid";
-//import ListItem from "../../components/List";
+import ExerciseItem from "../../components/Form/ExerciseItem";
 //import PopoverExampleMulti from "../../components/Accordion/Popover.js";
-
+import Input from "../../components/Form/Input";
+import FormBtn from "../../components/Form/FormBtn.js";
 
 class Exercises extends Component {
   constructor(props) {
@@ -22,13 +23,19 @@ class Exercises extends Component {
       olympicsMuscles: [],
       cardiosMuscles: [],
       powerliftingsMuscles: [],
-      popoverOpen: false
+      popoverOpen: false, //still need this?
+      workoutName: "",
+      selectedExercise: "",
+      selectedExercises: [],
+      workout: "",
+
     }
   };
-//need an onClick Function to toggle collapses
+  //need an onClick Function to toggle collapses
 
   componentDidMount() {
     this.loadExercises();
+
   }
 
   loadExercises = () => {
@@ -39,6 +46,9 @@ class Exercises extends Component {
 
           this.setState({
             exercises: res.data,
+            workoutName: "",
+            selectedExercise: "",
+            selectedExercises: [],
           })
           console.log("results:", res.data);
           this.sortExerciseTypes();
@@ -109,12 +119,48 @@ class Exercises extends Component {
 
   }
 
- 
+  //pushes the exercise id & name into an array upon clicking the save button
+  saveExercise = (result) => {
+    const workoutName = this.state.workoutName;
+    if(workoutName === ""){
+    let newWorkout = prompt("What do you want to Call New Workout?", "New Workout");
+    if (newWorkout === null || newWorkout === "") {
+      alert("Workout must be named!");
+    } else {
 
+      const selectedExercise = { name: result.Name, exercise: result._id };
+      //selectedExercises.push(selectedExercise);
+      this.setState({
+        selectedExercises: [...this.state.selectedExercises, selectedExercise],
+        workoutName: newWorkout
+      });
+      console.log("State of selectedExercises in saveExercise: ", this.state.selectedExercises);
+    }
+  }else {
+
+    const selectedExercise = { name: result.Name, exercise: result._id };
+    //selectedExercises.push(selectedExercise);
+    this.setState({
+      selectedExercises: [...this.state.selectedExercises, selectedExercise]
+    });
+
+    }
+
+
+  }
+  saveWorkout = () => {
+    API.saveWorkout({
+      Name: this.state.workoutName,
+      Exercises: this.state.selectedExercises,
+      Dates: []
+    })
+  };
   deleteExercise = id => {
-    API.deleteExercise(id)
-      .then(res => this.loadExercises())
-      .catch(err => console.log(err));
+
+    console.log("State of selectedExercises in deleteExercise: ", this.state.selectedExercises);
+    const clickedExercise = this.state.selectedExercises.filter(selectedExercise => selectedExercise.exercise !== id);
+    this.setState({ selectedExercises: clickedExercise });
+    console.log("After Delete Button: ", this.state.selectedExercises);
   };
 
   handleInputChange = event => {
@@ -122,27 +168,45 @@ class Exercises extends Component {
     this.setState({
       [name]: value
     });
+    console.log(value);
   };
 
-  handleFormSubmit = event => {
-    event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveExercise({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadExercises())
-        .catch(err => console.log(err));
-    }
+  //this refreshes the form
+  searchArticles = query => {
+    //gets from database
+    API.search(query)
+      .then(res => {
+        console.log(this.state)
+        this.setState({
+          results: res.data.response.docs,
+          search: "", startDate: "", endDate: ""
+        })
+        console.log(this.state)
+      }
+      )
+      .catch(err => console.log(err));
+
   };
+
+  //handleFormSubmit = event => {
+  //  event.preventDefault();
+  //  if (this.state.workoutName ) {
+  ////    API.saveWorkout({
+  ////      Name: result.headline.main,
+  ////    Exercises: result.pub_date,
+  ////    Dates: []
+  ////  })
+  //    //.then(res => this.loadExercises())
+  //    .catch(err => console.log(err));
+  //}
+  //};
 
 
   render() {
     return (
       <Container fluid>
         <Row>
-         
+
           <Col size="md-3 sm-12">
             <div className="accordion" id="accordionExample">
               {/*} Convert the 5 types into objects that have an array of of Muscle Groups, that way the array
@@ -161,6 +225,7 @@ class Exercises extends Component {
                     <ul>
                       {this.state.cardiosMuscles.map(cardio => (
                         <ExerciseType
+                          key={cardio.replace(/\s/g, '') + "Type"}
                           id={cardio.replace(/\s/g, '') + "Type"}
                           group={cardio}
                         >
@@ -173,6 +238,9 @@ class Exercises extends Component {
                               detailedMuscleGroup={cardios.Detailed_Muscle_Group}
                               equipment={cardios.Equipment}
                               difficulty={cardios.Difficulty}
+                              data={cardios}
+                              //saveWorkout={this.saveWorkout}
+                              saveExercise={this.saveExercise}
                             />))}
                         </ExerciseType>
                       ))}
@@ -194,6 +262,7 @@ class Exercises extends Component {
                     <ul>
                       {this.state.olympicsMuscles.map(olympic => (
                         <ExerciseType
+                          key={olympic.replace(/\s/g, '') + "Type"}
                           id={olympic.replace(/\s/g, '') + "Type"}
                           group={olympic}
                         >
@@ -206,6 +275,10 @@ class Exercises extends Component {
                               detailedMuscleGroup={olympics.Detailed_Muscle_Group}
                               equipment={olympics.Equipment}
                               difficulty={olympics.Difficulty}
+                              data={olympics}
+                              // saveWorkout={this.saveWorkout}
+                              saveExercise={this.saveExercise}
+
                             />))}
                         </ExerciseType>
 
@@ -229,6 +302,7 @@ class Exercises extends Component {
                     <ul>
                       {this.state.powerliftingsMuscles.map(powerlifting => (
                         <ExerciseType
+                          key={powerlifting.replace(/\s/g, '') + "Type"}
                           id={powerlifting.replace(/\s/g, '') + "Type"}
                           group={powerlifting}
                         >
@@ -241,6 +315,10 @@ class Exercises extends Component {
                               detailedMuscleGroup={powerliftings.Detailed_Muscle_Group}
                               equipment={powerliftings.Equipment}
                               difficulty={powerliftings.Difficulty}
+                              data={powerliftings}
+                              //saveWorkout={this.saveWorkout}
+                              saveExercise={this.saveExercise}
+
                             />))}
                         </ExerciseType>
                       ))}
@@ -263,6 +341,7 @@ class Exercises extends Component {
                       {this.state.strengthsMuscles.map(strength => (
 
                         <ExerciseType
+                          key={strength.replace(/\s/g, '') + "Type"}
                           id={strength.replace(/\s/g, '') + "Type"}
                           group={strength}
                         >
@@ -275,6 +354,10 @@ class Exercises extends Component {
                               detailedMuscleGroup={strengths.Detailed_Muscle_Group}
                               equipment={strengths.Equipment}
                               difficulty={strengths.Difficulty}
+                              data={strengths}
+                              //saveWorkout={this.saveWorkout}
+                              saveExercise={this.saveExercise}
+
                             />))}
                         </ExerciseType>
                       ))}
@@ -297,6 +380,7 @@ class Exercises extends Component {
                       {this.state.stretchesMuscles.map(stretch => (
 
                         <ExerciseType
+                          key={stretch.replace(/\s/g, '') + "Type"}
                           id={stretch.replace(/\s/g, '') + "Type"}
                           group={stretch}
                         >
@@ -304,18 +388,22 @@ class Exercises extends Component {
                             <CollapseItem
                               key={stretches._id}
                               id={stretches._id}
+                              data={stretches}
                               name={stretches.Name}
                               otherMuscleGroups={stretches.Other_Muscle_Groups}
                               detailedMuscleGroup={stretches.Detailed_Muscle_Group}
                               equipment={stretches.Equipment}
                               difficulty={stretches.Difficulty}
+                              saveExercise={this.saveExercise}
+                            //
+
                             >
-                            
+
                             </CollapseItem>
-                          
-                            
-                           
-                            ))}
+
+
+
+                          ))}
                         </ExerciseType>
 
                       ))}
@@ -333,7 +421,33 @@ class Exercises extends Component {
             </div >
           </Col >
           <Col size="md-6">
+            <div>
+              {!this.state.workoutName ? (
+                <h1 className="text-center">Choose an Exercise to Begin</h1>
 
+              ) : (
+
+
+                  <div className="card">
+                    <Input
+                      name={this.state.workoutName}
+                    />
+
+                    {this.state.selectedExercises.map(exercise => (
+                      <ExerciseItem
+                        key={exercise.exercise}
+                        id={exercise.exercise}
+                        name={exercise.name}
+                        deleteExercise={this.deleteExercise}
+                      />
+                    ))}
+                    <FormBtn
+                  saveWorkout={this.saveWorkout}
+                />
+                  </div>
+                  
+                )}
+            </div>
 
           </Col>
           <Col size="md-3">

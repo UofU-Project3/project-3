@@ -1,7 +1,9 @@
 import React from "react";
 
-export const FormBtn = props => (
-  <button {...props} style={{ float: "right", marginBottom: 10 }} className="btn btn-success">
-    {props.children}
+ const FormBtn = props => (
+ 
+  <button className="btn btn-success" onClick={() => props.saveWorkout()}>
+  Submit
   </button>
 );
+export default FormBtn;
