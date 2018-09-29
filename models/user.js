@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   Name: { type: String, required: true },
-  Email: String,
+  email: {
+    type: String,
+    unique: true,
+    match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
+  },
   Password: String,
   Equipment:[String],
   Workout: [{ type: Schema.Types.ObjectId, ref: 'Workout' }],

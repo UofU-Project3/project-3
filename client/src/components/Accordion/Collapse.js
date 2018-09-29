@@ -23,7 +23,7 @@ export default class CollapseItem extends React.Component {
 
                 <li onMouseOver={this.toggle} id={'Popover-' + this.props.id}>
                     <p id={this.props.id}>{this.props.name}</p>
-                    <button className="btn btn-primary" onClick={() => this.props.saveExercise(this.props.data)}>
+                    <button id={this.props.id} className="btn btn-primary" onClick={() => this.props.saveExercise(this.props.data)}>
                         Add
                     </button>
            

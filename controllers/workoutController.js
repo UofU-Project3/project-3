@@ -5,7 +5,6 @@ const db = require("../models");
 // Defining methods for the workoutsController
 module.exports = {
   findAll: function(req, res) {
-    
     db.Workout
       .find(req.query)
       .sort({ date: -1 })
@@ -20,6 +19,7 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
+    console.log("REQ.BODY: "+JSON.stringify(req.body));
     db.Workout
       .create(req.body)
       .then(dbModel => res.json(dbModel))

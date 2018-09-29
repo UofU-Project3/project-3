@@ -27,7 +27,7 @@ class Exercises extends Component {
       workoutName: "",
       selectedExercise: "",
       selectedExercises: [],
-      workout: "",
+      workout: [],
 
     }
   };
@@ -143,17 +143,28 @@ class Exercises extends Component {
     this.setState({
       selectedExercises: [...this.state.selectedExercises, selectedExercise]
     });
-
+  };
     }
+    formatWorkout = () => {
+      const tempArr = []
+      this.state.selectedExercises.forEach(exercise => {
+tempArr.push(exercise.exercise);
+console.log("TempARR: ",tempArr);
+      })
+      this.setState({
+        workout: [tempArr]
+      }, this.saveWorkout(tempArr));
+     
 
+    console.log("WORKOUT: ",this.state.workout);
 
   }
-  saveWorkout = () => {
+  saveWorkout = (tempArr) => {
     API.saveWorkout({
       Name: this.state.workoutName,
-      Exercises: this.state.selectedExercises,
+      Exercises: tempArr,
       Dates: []
-    })
+    }).catch(err => console.log("WorkoutDb: ",err));
   };
   deleteExercise = id => {
 
@@ -442,7 +453,7 @@ class Exercises extends Component {
                       />
                     ))}
                     <FormBtn
-                  saveWorkout={this.saveWorkout}
+                  formatWorkout={this.formatWorkout}
                 />
                   </div>
                   

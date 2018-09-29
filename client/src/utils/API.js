@@ -14,9 +14,9 @@ export default {
     return axios.delete("/api/exercises/" + id);
   },
   // Saves a exercise to the database
-  //saveWorkout: function(exerciseData) {
-   // return axios.post("/api/workouts", workoutData);
-  //},
+  saveWorkout: function(workoutData) {
+    return axios.post("/api/workouts", workoutData);
+  },
   updateWorkout: function(id) {
     return axios.put("/api/workouts/"+ id);
   }
